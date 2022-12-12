@@ -1,2 +1,2 @@
-# cy-m-t-o
+# CY-Météo
 MA MEEEEN
