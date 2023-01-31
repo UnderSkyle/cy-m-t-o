@@ -11,17 +11,7 @@ help() {
     exit 0
 }
 
-map() {
-    outpoutmap="set output 'output${RANDOM}.png
-    set view map
-    set pm3d
-    set xlabel 'longitude'
-    set ylabel 'latitude'
-    set palette color positive
-    splot ${outpoutfile} using 1:2:3 with pm3d"
-    gnuplot -p -c $outpoutmap
 
-}
 
 #check if there is arguments
 
@@ -125,8 +115,6 @@ for arg in $* ;do #not robust yet watch out four double -*
     esac
 done
 
-echo $moist
-
 if [ $temp -eq 0 ] && [ $press -eq 0 ] && [ $wind -eq 0 ] && [ $moist -eq 0 ] && [ $height -eq 0 ] ; then
     echo "Error : missing necessary argument (-t or -p or -w or -m or -h)"
     exit 4
@@ -151,7 +139,7 @@ fi
 # todo later because mode
 
 if [ -e 'temp.csv' ] ; then
-    echo "lol"
+    echo "remove temp"
 fi
 # if [ $temp -eq 1 ] ; then
 # fi
@@ -160,28 +148,63 @@ fi
 
 
 
-outpout=0
+output=0
 
 if [ $wind -eq 1 ] ;then
     cut -f 1,4,5 -d';' $toSort > temp.csv
     make
 fi
 
-
 if [ $moist -eq 1 ] ; then
     cut -f 6,10 -d';' $toSort > temp.csv
-    map
+#     make
+    if [ -e "map.gnu" ] ; then
+        rm map.gnu
+    fi
+        echo "set terminal png size 400,300 enhanced font default
+set output 'output.png'
+set view map
+unset key
+set pm3d
+set dgrid3d 100,100
+set pm3d interpolate 0,0
+set title 'graphique'
+set xlabel 'longitude'
+set ylabel 'latitude'
+set xrange [-180:180]
+set yrange [-180:180]
+set palette rgb 21,22,23
+splot 'output.csv' using 1:2:3 with pm3d">map.gnu
+    gnuplot -p -c map.gnu
+    mv output.png heatmap_moisture.png
+
 fi
 if [ $height -eq 1 ] ; then
     cut -f 10,14 -d';' $toSort > temp.csv
     make
+#     ./lecode temp.csv h 1
+    if [ -e "map.gnu" ] ; then
+        rm map.gnu
+    fi
+        echo "set terminal png size 400,300 enhanced font default
+set output 'output.png'
+set view map
+unset key
+set pm3d
+set dgrid3d 100,100
+set pm3d interpolate 0,0
+set title 'graphique'
+set xlabel 'longitude'
+set ylabel 'latitude'
+set xrange [-180:180]
+set yrange [-180:180]
+set palette viridis
+splot 'output.csv' using 1:2:3 with pm3d">map.gnu
+    gnuplot -p -c map.gnu
+    mv output.png heatmap_moisture.png
+
+
 fi
-
-
-
-
-
-
 
 
 
