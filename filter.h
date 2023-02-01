@@ -75,45 +75,45 @@ AVLNode* balanceAVL(AVLNode* pTree){
 	return pTree;
 }
 
-AVLNode* addchildAVL_B(AVLNode *pTree, int val, weather_elements* element ,int* h) {
+AVLNode* addchildAVL_B(AVLNode *pTree, int val, weather_elements* elmt ,int* h) {
 	if (val < pTree->value) {
-    	pTree->Left = addchildAVL(pTree->Left, val, element, h);
+    	pTree->Left = addchildAVL(pTree->Left, val, elmt, h);
   	} 
   	else if (val > pTree->value) {
-   	 pTree->Right = addchildAVL(pTree->Right, val, element, h);
+   	 pTree->Right = addchildAVL(pTree->Right, val, elmt, h);
  	 } 
 	else {
     	return pTree;
   	}
 	if(pTree==NULL){
 		*h=1;
-	return createtreeAVL(val,element);
+	return createtreeAVL(val,elmt);
 	}
 	
 	else if (val<pTree->value){
-		pTree->Left=addchildAVL(pTree->Left,val,element,h);
+		pTree->Left=addchildAVL(pTree->Left,val,elmt,h);
 		*h=-*h;
 	}
 	else if(val>pTree->value){
-		pTree->Right=addchildAVL(pTree->Right,val,element,h);
+		pTree->Right=addchildAVL(pTree->Right,val,elmt,h);
 		}
 	else{
-		if(element->val_sorted == 1){
-			if(element-> altitude < pTree->element->altitude){
-				pTree->Left = addchildAVL(pTree->Left,val,element,h);
+		if(elmt->val_sorted == 1){
+			if(elmt-> altitude < pTree->element->altitude){
+				pTree->Left = addchildAVL(pTree->Left,val,elmt,h);
 				*h=-*h;
 			}
-			else if(element->altitude > ptree->element->altitude){
-				pTree->Right = addchildAVL(pTree->Right,val,element,h);
+			else if(elmt->altitude > ptree->element->altitude){
+				pTree->Right = addchildAVL(pTree->Right,val,elmt,h);
 			}
 			else {
 				*h=0;
 				return pTree;
 			}
 		}
-		if(element_>val_sorted == 2){
-			if(element -> humidity > pTree->element->humidity){
-				pTree-> element -> humidity = element->humidity;
+		if(elmt->val_sorted == 2){
+			if(elmt -> humidity > pTree->element->humidity){
+				pTree-> element -> humidity = elmt->humidity;
 			}
 			*h=0;
 			return pTree;
@@ -133,9 +133,9 @@ AVLNode* addchildAVL_B(AVLNode *pTree, int val, weather_elements* element ,int* 
 	}
 return pTree;		
 }
-AVLNode* addchildAVL_A(AVLNode *pTree, int val, weather_elements* element){
+AVLNode* addchildAVL_A(AVLNode *pTree, int val, weather_elements* elmt){
 	int h;
-	return addchildAVL_B(pTree,  val, element,&h);
+	return addchildAVL_B(pTree,  val, elmt,&h);
 }
 void remakeAVL(AVLNode** pTree, AVLNode* pTree_tmp){
 	if(pTree_tmp != NULL){
