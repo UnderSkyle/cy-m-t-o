@@ -53,14 +53,13 @@ wind=0
 height=0
 moist=0
 sorting=0 #originaly to 1(avl) but is necessary to check if there is a double used in arg
-co1=? co2=?
 date1=''
 date2=''
 modet=0
 modep=0
 d=0
-co1=0
-co2=0
+coo=""
+
 for arg in $* ;do #not robust yet watch out four double -*
     case $arg in
         '-t'?) temp=1
@@ -90,12 +89,12 @@ for arg in $* ;do #not robust yet watch out four double -*
         '-w') wind=1 d=0 ;;
         '-h') heigt=1 d=0 ;;
         '-m') moist=1 d=0;;
-#         '-F') co1=? co2=? d=0;;
-#         '-G') co1=? co2=? d=0;;
-#         '-S') co1=? co2=? d=0;;
-#         '-A') co1=? co2=? d=0;;
-#         '-O') co1=? co2=? d=0;;
-        '-Q') co1=? co2=? d=0;;
+        '-F') coo="F" d=0;;
+        '-G') coo="G" d=0;;
+        '-S') coo="S" d=0;;
+        '-A') coo="A" d=0;;
+        '-O') coo="O" d=0;;
+        '-Q') coo="Q" d=0;;
         '-d') d=1 ;;
         '--tab') sorting=3 d=0;;
         '--abr') sorting=2 d=0;;
@@ -124,11 +123,6 @@ if [ $temp -eq 0 ] && [ $press -eq 0 ] && [ $wind -eq 0 ] && [ $moist -eq 0 ] &&
 fi
 
 
-#remove temporary file
-if [ -e 'temp.csv' ] ; then
-    rm "temp.csv"
-fi
-
 
 if [ $d -eq 1 ] ; then
     if (( $date1 > $date2 )) ; then
@@ -142,28 +136,91 @@ if [ $d -eq 1 ] ; then
     echo "lol"
 fi
 
-
+xmin=0
+xmax=0
+ymin=0
+ymax=0
 # todo the map thingy later(annoying)
-if [ ! $co1 -eq 0 ] ; then
-    #cut the map using co1 et co2
+if [ ! -z $coo ] ; then
+    case $coo in
+    '-F') xmin=-4 xmax=8 ymin=42 ymax=51 ;;
+    '-G') xmin= xmax= ymin= ymax= ;;
+    '-S') xmin= xmax= ymin= ymax= ;;
+    '-A') xmin= xmax= ymin= ymax= ;;
+    '-O') xmin= xmax= ymin= ymax= ;;
+    '-Q') xmin= xmax= ymin= ymax= ;;
+    esac
 fi
 
 # todo later because mode
 
+#gnuplot -t
 
-# if [ $temp -eq 1 ] ; then
-# fi
-# if [ $press -eq 1 ] ; then
-# fi
+if [ $temp -eq 1 ] ; then
+    case $modet in
+    1)  cut -f ?,?,?,? -d";" $toSort > temp.csv
+        make
+#       ./file
+        gnuplot -p -c mode1.gnu "temperature"
+        ;;
+    2)cut -f ?,?,?,? -d";" $toSort > temp.csv
+        make
+#       ./file
+        gnuplot -p -c mode2.gnu "temperature";;
+    3)cut -f ?,?,?,? -d";" $toSort > temp.csv
+        make
+#       ./file
+        gnuplot -p -c mode3.gnu "temperature";;
+    esac
+fi
+
+
+#gnuplot -p
+
+if [ $press -eq 1 ] ; then
+    case $modep in
+    1)  cut -f ?,?,?,? -d";" $toSort > temp.csv
+        make
+#       ./file
+        gnuplot -p -c mode1.gnu "pression"
+        ;;
+    2)cut -f ?,?,?,? -d";" $toSort > temp.csv
+        make
+#       ./file
+        gnuplot -p -c mode2.gnu "pression";;
+    3)cut -f ?,?,?,? -d";" $toSort > temp.csv
+        make
+#       ./file
+        gnuplot -p -c mode3.gnu "pression";;
+    esac
+fi
 
 
 
 output=0
 
+
+#gnuplot -w
+
 if [ $wind -eq 1 ] ;then
     cut -f 1,4,5 -d';' $toSort > temp.csv
-    make
+#     make
+    echo "set terminal png size 400,300 enhanced font default
+set output 'output.png'
+unset key
+set grid
+set title 'graphique des vents'
+set xlabel 'longitude'
+set ylabel 'latitude'
+set xrange [-180:180]
+set yrange [-180:180]
+plot 'output.csv' using 1:2:($3):($4) with vectors head size 0.5,20
+">map.gnu
+    gnuplot -p -c map.gnu
+    mv output.png vectormap_wind.png
 fi
+
+#gnuplot -m
 
 if [ $moist -eq 1 ] ; then
     cut -f 6,10 -d';' $toSort > temp.csv
@@ -189,6 +246,10 @@ splot 'output.csv' using 1:2:3 with pm3d">map.gnu
     mv output.png heatmap_moisture.png
 #    ./lecode temp.csv m 1
 fi
+
+
+#gnuplot -h
+
 if [ $height -eq 1 ] ; then
     cut -f 10,14 -d';' $toSort > temp.csv
     make
@@ -212,8 +273,6 @@ set palette viridis
 splot 'output.csv' using 1:2:3 with pm3d">map.gnu
     gnuplot -p -c map.gnu
     mv output.png heatmap_height.png
-
-
 fi
 
 
