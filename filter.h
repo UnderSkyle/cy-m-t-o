@@ -1,16 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "smallfunction.h"
+#include "struct.h"
 
 //////////////////////////////////////// AVL filter////////////////////////////////////////////
-
-typedef struct AVLNode2 {
-  int value;
-  int height;
-  struct AVLNode2 *Left;
-  struct AVLNode2 *Right;
-} AVLNode;
-
 
 AVLNode *createtreeAVL(int val,weather_elements* element){
     AVLNode* pTree=malloc(sizeof(AVLNode));
@@ -192,12 +185,6 @@ void Rapidfilter(int tab[], int first, int last) {
 }
 
 /////////////////////////////////////////////ABR filter////////////////////////////////////////
-
-typedef struct Tree{
-	int value;
-	struct Tree* pLeft;
-	struct Tree* pRight;
-}Tree;
 
 Tree* createTreeABR(int val){
 	Tree* pTree=malloc(sizeof(Tree));
