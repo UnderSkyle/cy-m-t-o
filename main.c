@@ -1,42 +1,11 @@
 #include<stdlib.h>
 #include<stdio.h>
 #include "filter.h"
+#include "struct.h"
 
 
+ 
 
-typedef struct elements{
-	int val;
-	char altitude[10];
-	char coordinates[10];
-	char moisture[10];
-	 
-
-
-
-}elements;
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
 int main(){
 FILE* fichier = NULL;
 char letter;
@@ -68,6 +37,8 @@ int whichfilter;
 					if(f1 != NULL){
 						while(f1 != EOF){
 							fscanf(f1,"%d %d", coordinates, altitude);
+							
+							
 							}
 						}
 					break;
