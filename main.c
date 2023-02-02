@@ -7,11 +7,11 @@
 typedef struct elements{
 	int val;
 	char altitude[10];
-	char coordinates[10];
+	char x[10];
+	char y[10]
 	char moisture[10];
-	 
-
-
+	char temp(10);
+	char pressure[10];
 
 }elements;
  
@@ -37,9 +37,9 @@ typedef struct elements{
  
  
  
-int main(){
+int main(int argc , int** argv[]){
 FILE* fichier = NULL;
-char letter;
+char letter = argv[2];
 int whichfilter;
  
 	switch(letter){
@@ -60,16 +60,16 @@ int whichfilter;
 			
 		case 'h' :
 			switch (whichfilter){
+
 				case 1 :
 					trier AVL
 					break;
 				case 2 :
-					f1=fopen("temp.csv","r");
-					if(f1 != NULL){
-						while(f1 != EOF){
-							fscanf(f1,"%d %d", coordinates, altitude);
-							}
-						}
+					f1=fopen("temp.csv","r")
+					while(ligne != EOF);
+
+						element a= creatElementsf(x, y, h);
+						IsertAbr(
 					break;
 				case 3 :
 					trier tab
