@@ -25,7 +25,7 @@ void walkthrough_infAvl(AVLNode* pTree, char cara)
 
 /////////////////////////////////////////////fusion filter functions///////////////////////////////
 void flip(int *a, int *b)
-oid Rapidfilter(int tab[], int first, int last)
+void Rapidfilter(int tab[], int first, int last)
 
 /////////////////////////////////////////////ABR functions////////////////////////////////////////
 Tree* createTreeABR(weather_elements* val)
