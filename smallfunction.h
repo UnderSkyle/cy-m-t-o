@@ -26,3 +26,10 @@ int min (int a, int b , int c){ // for the rotation of the AVL
 }
 
 // need to make average calculation for vecteurs
+int average( int a, int b , int c ){
+	int total;
+	int average;
+	total=a+b+c;
+	average=total/3;
+	return average;
+}	
