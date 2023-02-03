@@ -67,7 +67,7 @@ int main(int argc, const char* argv[]){
 						humidity_abr = addchildABR(humidity_abr,weather);
 						}
 						walkthrough_inf(humidity_abr,'m');
-					break;
+            break;
 				case 3 :
 					while(fgets(line,50,f1) != NULL){
 						weather_elements* weather = createweather_element();
@@ -133,6 +133,7 @@ int main(int argc, const char* argv[]){
 						altitude_abr = addchildABR(altitude_abr,weather);
 						}
 						walkthrough_inf(altitude_abr,'h');
+
 					break;
 				case 3 :
 					while(fgets(line,50,f1) != NULL){
@@ -149,6 +150,7 @@ int main(int argc, const char* argv[]){
 					break;
 				default :
 					AVLNode* altitude_avl = NULL;
+
 					while(fgets(line,50,f1) != NULL){
 						weather_elements* weather = createweather_element();
 						y_c = strtok(line,","); 				// taking the data from the beginning of the folder til ","
@@ -177,6 +179,7 @@ int main(int argc, const char* argv[]){
 			switch (whichfilter){
 				case 1 :
 				AVLNode* temperature_avl = NULL;
+
 				while(fgets(line,50,f1) != NULL){
 					weather_elements* weather = createweather_element();
 					ID = strtok(line,";");
@@ -205,5 +208,4 @@ int main(int argc, const char* argv[]){
 		default :
 			printf("we have a problem");
 		}
-
 }
