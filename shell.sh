@@ -7,7 +7,60 @@ outputfile="output.csv"
 
 #write the help
 help() {
-    echo 'WIP'
+    echo 'Usage : ls[OPTION]...[FILE]...
+Giving specific details of the files (from the present directory by default).
+Filtered by Alphébetical order if the options -cftuvSUX or –sort are in usage.
+
+
+The arguments you have to use for longer options are the same for the shorter ones.
+
+
+-f<name_of_file>,-- input file                                 unavoidable option        
+
+
+-d<min><max>,-- dates                                format of the dates                                                                                YYYY-MM-DD
+-h, -- altitude                                                 will show the altitude of each station.
+they will be sorted by descending order
+-h, -- humidity                                                 will show the maximum humidity
+recorded per station. They will be sorted by descending order
+-p1, -- atmospheric pressure                                will show the minimum, maximal and                                                                                                                                                                          average pressure of each station.
+                                                        The stations will be sorted by ascending                                                         order.
+-p2,-- atmospheric pressure                                 Stations will show the average pressure                                                          per day and hour.                            
+                                                        will be sorted by chronological order
+-p3,-- atmospheric pressure                                will show the pressure per day and hour.
+                                                        Stations will be sorted by chronological ,                                                         then by ascending order.
+-t1,-- temperature                                         will show the minimum, maximal and                                                                                                                                                                          average temperature of each station.
+The stations will be sorted by ascending
+order.
+-t2,-- temperature                                         will show the average tempeature                                                                  per day and hour per station.                            
+                                                        will be sorted by chronological order        
+-t3,--temperature                                         will show the temperature per day/hour.
+                                                        Stations will be sorted by chronological ,                                                         then by ascending order.
+-w,-- wind                                                 will show the average orientation and                                                         speed per Station.
+                                                        the stations will be sorted by ascending                                                         order
+types of locations : 
+
+
+-F,-- France                                                one of the locations available for data
+-G,-- French Guiana                                        one of the locations available for data
+-S,-- Saint-Pierre et Miquelon                         one of the locations available for data
+-A,-- Antilles                                                 one of the locations available for data
+-O,-- Indien Ocean                                         one of the locations available for data
+-Q,-- Antarctica                                        one of the locations available for data 
+
+
+types of filters
+
+
+-tab,-- tab                                                Filter program that uses fusion with a                                                         a linear structure
+-abr,-- abr                                                 Filter program that uses tree structure                                                        with recherche mechanism
+-avl,-- avl                                                Filter program that uses tree structure                                                        with a recherche mechanism and auto                                                        balancing mechanisms 
+
+
+Condition of exit : 
+0                in case of succesful
+1                in case of minor issues (like impossible to acces the sup folder)
+2                in case of major issues ( like impossible to acces an argument from a ligne of                                            commande).'
     exit 0
 }
 
