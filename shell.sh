@@ -68,11 +68,11 @@ coo=""
 for arg in $* ;do #not robust yet watch out four double -*
     case $arg in
         '-t'?) temp=1
-            if [ arg = '-t1' ] ; then
+            if [ $arg = '-t1' ] ; then
                 modet=1
-            elif [ arg = '-t2' ] ; then
+            elif [ $arg = '-t2' ] ; then
                 modet=2
-            elif [ arg = '-t3' ] ; then
+            elif [ $arg = '-t3' ] ; then
                 modet=3
             else
                 echo 'Error : -t requiere a mode EX : -t1'
@@ -80,26 +80,26 @@ for arg in $* ;do #not robust yet watch out four double -*
             fi
         ;;
         '-p'?) press=1
-            if [ arg = '-p1' ] ; then
+            if [ $arg = '-p1' ] ; then
                 modep=1
-            elif [ arg = '-p2' ] ; then
+            elif [ $arg = '-p2' ] ; then
                 modep=2
-            elif [ arg = '-p3' ] ; then
+            elif [ $arg = '-p3' ] ; then
                 modep=3
             else
-                echo 'Error : -t requiere a mode EX : -p1'
+                echo 'Error : -p requiere a mode EX : -p1'
                 exit 5
             fi
         ;;
         '-w') wind=1 d=0 ;;
         '-h') height=1 d=0 ;;
         '-m') moist=1 d=0;;
-        '-F') coo="F" d=0;;
-        '-G') coo="G" d=0;;
-        '-S') coo="S" d=0;;
-        '-A') coo="A" d=0;;
-        '-O') coo="O" d=0;;
-        '-Q') coo="Q" d=0;;
+        '-F') cat $toSort | awk -F ';' '{if($1 >= 7005 && $1 <= 7790) print $0}' > tempReg.csv $toSort = tempReg.csv d=0;;
+        '-G') cat $toSort | awk -F ';' '{if($1 >= 81401 && $1 <= 81415) print $0}'> tempReg.csv $toSort = tempReg.csv  d=0;;
+        '-S') cat $toSort | awk -F ';' '{if($1 == 71805) print $0}'> tempReg.csv $toSort = tempReg.csv  d=0;;
+        '-A') cat $toSort | awk -F ';' '{if($1 >= 78890 && $1 <= 78925) print $0}'> tempReg.csv $toSort = tempReg.csv  d=0;;
+        '-O') cat $toSort | awk -F ';' '{if($1 >= 61968 && $1 <= 67005) print $0}'> tempReg.csv $toSort = tempReg.csv  d=0;;
+        '-Q') cat $toSort | awk -F ';' '{if($1 == 89642) print $0}'> tempReg.csv $toSort = tempReg.csv  d=0;;
         '-d') d=1 ;;
         '--tab') sorting=3 d=0;;
         '--abr') sorting=2 d=0;;
@@ -145,10 +145,7 @@ xmin=0
 xmax=0
 ymin=0
 ymax=0
-# todo the map thingy later(annoying)
-if [ ! -z $coo ] ; then
-    echo "MAP WIP"
-fi
+
 
 # todo later because mode
 
@@ -161,19 +158,21 @@ fi
 
 if [ $temp -eq 1 ] ; then
     case $modet in
-    1)  cut -f ?,?,?,? -d";" $toSort > temp.csv
-        make
-#       ./file
-        gnuplot -p -c mode1.gnu "temperature"
+    1)
+#         cut -f ?,?,?,? -d";" $toSort > temp.csv
+#         make
+# #       ./file
+        gnuplot -p -c mode1t.gnu "temperature"
         ;;
-    2)cut -f ?,?,?,? -d";" $toSort > temp.csv
-        make
+#     2)
+#         cut -f ?,?,?,? -d";" $toSort > temp.csv
+#         make
 #       ./file
-        gnuplot -p -c mode2.gnu "temperature";;
-    3)cut -f ?,?,?,? -d";" $toSort > temp.csv
-        make
-#       ./file
-        gnuplot -p -c mode3.gnu "temperature";;
+#         gnuplot -p -c mode2t.gnu "temperature";;
+#     3)cut -f ?,?,?,? -d";" $toSort > temp.csv
+#         make
+# #       ./file
+#         gnuplot -p -c mode3.gnu "temperature";;
     esac
 fi
 
@@ -182,19 +181,21 @@ fi
 
 if [ $press -eq 1 ] ; then
     case $modep in
-    1)  cut -f ?,?,?,? -d";" $toSort > temp.csv
-        make
+    1)
+#         cut -f ?,?,?,? -d";" $toSort > temp.csv
+#         make
 #       ./file
         gnuplot -p -c mode1.gnu "pression"
         ;;
-    2)cut -f ?,?,?,? -d";" $toSort > temp.csv
-        make
+#     2)
+#         cut -f ?,?,?,? -d";" $toSort > temp.csv
+#         make
 #       ./file
-        gnuplot -p -c mode2.gnu "pression";;
-    3)cut -f ?,?,?,? -d";" $toSort > temp.csv
-        make
-#       ./file
-        gnuplot -p -c mode3.gnu "pression";;
+#         gnuplot -p -c mode2.gnu "pression";;
+#     3)cut -f ?,?,?,? -d";" $toSort > temp.csv
+#         make
+#        ./file
+#         gnuplot -p -c mode3.gnu "pression";;
     esac
 fi
 
@@ -206,28 +207,18 @@ output=0
 #gnuplot -w
 
 if [ $wind -eq 1 ] ;then
-    cut -f 1,4,5 -d';' $toSort > temp.csv
+#     cut -f 1,4,5 -d';' $toSort > temp.csv C doesn't work so use the files given by Maxime Pauchon
 #     make
-    echo "set terminal png size 400,300 enhanced font default
-set output 'output.png'
-unset key
-set grid
-set title 'graphique des vents'
-set xlabel 'longitude'
-set ylabel 'latitude'
-set xrange [*:*]
-set yrange [*:*]
-plot 'output.csv' using 1:2:($3):($4) with vectors head size 0.5,20
-">map.gnu
-    gnuplot -p -c map.gnu
+    gnuplot -p -c mapwind.gnu
     mv output.png vectormap_wind.png
 fi
 
 #gnuplot -m
 
 if [ $moist -eq 1 ] ; then
-    cut -f 6,10 -d';' $toSort > temp.csv
+#     cut -f 6,10 -d';' $toSort > temp.csv C doesn't work so use the files given by Maxime Pauchon
 #     make
+#    ./exec m 1
     if [ -e "map.gnu" ] ; then
         rm map.gnu
     fi
@@ -236,7 +227,7 @@ set output 'output.png'
 set view map
 unset key
 set pm3d
-set dgrid3d 100,100
+set dgrid3d 500,500
 set pm3d interpolate 0,0
 set title 'graphique humidité'
 set xlabel 'longitude'
@@ -244,7 +235,7 @@ set ylabel 'latitude'
 set xrange [*:*]
 set yrange [*:*]
 set palette rgb 21,22,23
-splot 'output.csv' using 1:2:3 with pm3d">map.gnu
+splot 'ordereddatam' using 4:3:2 with pm3d">map.gnu
     gnuplot -p -c map.gnu
     mv output.png heatmap_moisture.png
 fi
@@ -253,11 +244,9 @@ fi
 #gnuplot -h
 
 if [ $height -eq 1 ] ; then
-    cut -f 14,10 -d';' $toSort > temp.csv
+#     cut -f 14,10 -d';' $toSort > temp.csv C doesn't work so use the files given by Maxime Pauchon
 #     make
-    awk '{print $1,$2}' FS="," OFS=";" temp.csv > temp2.csv
-    awk '{print $1,$2,$3}' FS=";" OFS=" " temp2.csv > temp.csv
-    cat temp3.csv > output.csv
+#     ./exec m 2
     if [ -e "map.gnu" ] ; then
         rm map.gnu
     fi
@@ -266,21 +255,21 @@ set output 'output.png'
 set view map
 unset key
 set pm3d
-set dgrid3d 100,100
+set dgrid3d 500,500
 set pm3d interpolate 0,0
 set title 'graphique altitude'
 set xlabel 'longitude'
 set ylabel 'latitude'
 set xrange [*:*]
 set yrange [*:*]
-set palette rgb 11,12,13
-splot 'output.csv' using 1:2:3 with pm3d">map.gnu
+set palette rgb 33,15,10
+splot 'ordereddatah' using 4:3:2 with pm3d">map.gnu
     gnuplot -p -c map.gnu
     mv output.png heatmap_height.png
 
 fi
 
-rm temp*.csv
+# rm temp*.csv
 
 
 
