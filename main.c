@@ -2,6 +2,7 @@
 #include<stdio.h>
 #include "filter.h"
 #include<string.h>
+#include "header.h"
 
 
 weather_elements* createweather_element(){
