@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "smallfunction.h"
-#include "struct.h"
+#include "header.h"
 
 
 FILE* file1;
@@ -92,6 +92,7 @@ AVLNode* addchildAVL_B(AVLNode *pTree, weather_elements* elmt ,int* h) {
     	return pTree;
   	}
 
+
 	if(*h!=0){
 	pTree->height = pTree-> height + *h;
 	pTree=balanceAVL(pTree);
@@ -108,8 +109,18 @@ AVLNode* addchildAVL_A(AVLNode *pTree, weather_elements* elmt){
 	int h;
 	return addchildAVL_B(pTree,elmt,&h);
 }
-
-
+AVLNode* addchildAVL_A(AVLNode *pTree, int val, weather_elements* elmt){
+	int h;
+	return addchildAVL_B(pTree,  val, elmt,&h);
+}
+void remakeAVL(AVLNode** pTree, AVLNode* pTree_tmp){
+	if(pTree_tmp != NULL){
+		pTree_tmp -> element ->val_sorted = 1;
+		*pTree = addchildAVL_A(*pTree,pTree_tmp->element->humidity, pTree_tmp-> element);
+		remakeAVL(pTree, pTree_tmp->Left);
+		remakeAVL(pTree, pTree_tmp->Right);
+	}
+}
 
 
 void walkthrough_infAvl(AVLNode* pTree, char cara){
@@ -164,6 +175,7 @@ void Rapidfilter(int tab[], int first, int last) {
 /////////////////////////////////////////////ABR filter////////////////////////////////////////
 
 Tree* createTreeABR(weather_elements* val){
+
 	Tree* pTree=malloc(sizeof(Tree));
 	if(pTree==NULL){
 		exit(1);
