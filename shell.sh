@@ -11,8 +11,6 @@ help() {
     exit 0
 }
 
-
-
 #check if there is arguments
 
 if [ $nmb_args -eq 0 ] ; then
@@ -43,6 +41,13 @@ done
 #check if the file is correct and readable
 if [ ! -e $toSort ] || [ ! -f $toSort ] || [ ! -r $toSort ] ; then
     echo 'Error : file does not exist or is not a file or cannot be read'
+fi
+test=`head -c 2 $toSort`
+test2="ID"
+if [ "$test" == "$test2" ] ; then
+    echo 'hello'
+    sed 1d $toSort > "meteo_data.csv"
+    toSort="meteo_data.csv"
 fi
 
 
@@ -87,7 +92,7 @@ for arg in $* ;do #not robust yet watch out four double -*
             fi
         ;;
         '-w') wind=1 d=0 ;;
-        '-h') heigt=1 d=0 ;;
+        '-h') height=1 d=0 ;;
         '-m') moist=1 d=0;;
         '-F') coo="F" d=0;;
         '-G') coo="G" d=0;;
@@ -133,7 +138,7 @@ if [ $d -eq 1 ] ; then
         echo "Error : date invalid"
         exit 7
     fi
-    echo "lol"
+    echo "Date not working yet"
 fi
 
 xmin=0
@@ -142,19 +147,17 @@ ymin=0
 ymax=0
 # todo the map thingy later(annoying)
 if [ ! -z $coo ] ; then
-    case $coo in
-    '-F') xmin=-4 xmax=8 ymin=42 ymax=51 ;;
-    '-G') xmin= xmax= ymin= ymax= ;;
-    '-S') xmin= xmax= ymin= ymax= ;;
-    '-A') xmin= xmax= ymin= ymax= ;;
-    '-O') xmin= xmax= ymin= ymax= ;;
-    '-Q') xmin= xmax= ymin= ymax= ;;
-    esac
+    echo "MAP WIP"
 fi
 
 # todo later because mode
 
 #gnuplot -t
+
+if [ ! -e $toSort ] ; then
+    echo 'non'
+    exit 9
+fi
 
 if [ $temp -eq 1 ] ; then
     case $modet in
@@ -212,8 +215,8 @@ set grid
 set title 'graphique des vents'
 set xlabel 'longitude'
 set ylabel 'latitude'
-set xrange [-180:180]
-set yrange [-180:180]
+set xrange [*:*]
+set yrange [*:*]
 plot 'output.csv' using 1:2:($3):($4) with vectors head size 0.5,20
 ">map.gnu
     gnuplot -p -c map.gnu
@@ -235,25 +238,26 @@ unset key
 set pm3d
 set dgrid3d 100,100
 set pm3d interpolate 0,0
-set title 'graphique d'humidité'
+set title 'graphique humidité'
 set xlabel 'longitude'
 set ylabel 'latitude'
-set xrange [-180:180]
-set yrange [-180:180]
+set xrange [*:*]
+set yrange [*:*]
 set palette rgb 21,22,23
 splot 'output.csv' using 1:2:3 with pm3d">map.gnu
     gnuplot -p -c map.gnu
     mv output.png heatmap_moisture.png
-#    ./lecode temp.csv m 1
 fi
 
 
 #gnuplot -h
 
 if [ $height -eq 1 ] ; then
-    cut -f 10,14 -d';' $toSort > temp.csv
-    make
-#     ./lecode temp.csv h 1
+    cut -f 14,10 -d';' $toSort > temp.csv
+#     make
+    awk '{print $1,$2}' FS="," OFS=";" temp.csv > temp2.csv
+    awk '{print $1,$2,$3}' FS=";" OFS=" " temp2.csv > temp.csv
+    cat temp3.csv > output.csv
     if [ -e "map.gnu" ] ; then
         rm map.gnu
     fi
@@ -264,18 +268,19 @@ unset key
 set pm3d
 set dgrid3d 100,100
 set pm3d interpolate 0,0
-set title 'graphique d'altitude'
+set title 'graphique altitude'
 set xlabel 'longitude'
 set ylabel 'latitude'
-set xrange [-180:180]
-set yrange [-180:180]
-set palette viridis
+set xrange [*:*]
+set yrange [*:*]
+set palette rgb 11,12,13
 splot 'output.csv' using 1:2:3 with pm3d">map.gnu
     gnuplot -p -c map.gnu
     mv output.png heatmap_height.png
+
 fi
 
-
+rm temp*.csv
 
 
 

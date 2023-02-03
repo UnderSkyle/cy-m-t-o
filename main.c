@@ -1,22 +1,8 @@
 #include<stdlib.h>
 #include<stdio.h>
 #include "filter.h"
-#include "struct.h"
 #include<string.h>
 
-typedef struct weather_elements{
-	int val;
-	char altitude[20];
-	char coord_x[20];
-	char coord_y[20];
-	char humidity[20];
-	char temperature[20];
-	char tempe_min[20];
-	char tempe_max[20];
-	char station[20];
-	 
-
-}weather_elements;
 
 weather_elements* createweather_element(){
 	weather_elements* weather = malloc(sizeof(weather_elements));
@@ -25,156 +11,162 @@ weather_elements* createweather_element(){
 	}
 	return weather;
 }
-	
+
 
 int main(int argc, const char* argv[]){
-FILE* fichier = NULL;
-char letter;
-int whichfilter;
- 
+	printf("hello1");
+	FILE* fichier = NULL;
+	char letter = argv[1][0];
+	int whichfilter = atoi(argv[2]);
+	AVLNode* humidity_avl = NULL;
+	Tree* humidity_abr = NULL;
+	AVLNode* altitude_avl = NULL;
+	Tree* altitude_abr = NULL;
+	AVLNode* temperature_avl = NULL;
+	FILE* f1;
+	f1=fopen("temp.csv","r");
+	char line[50];
+	char* x_c;
+	char* y_c;
+	printf("hello");
 	switch(letter){
 		case 'm':
-			FILE* f1;
-			f1=fopen("temp.csv","r");
-			char line[50];
 			char* humidity_c;
-			char* x_c;
-			char* y_c;
 			if(f1 == NULL){
 				printf("error humidity");
 				exit(2);
 			}
-			
+
 			switch (whichfilter){
 				case 1 :
-				AVL* humidity_avl = NULL;
+				AVLNode* humidity_avl = NULL;
 					while(fgets(line,50,f1) != NULL){
 						weather_elements* weather = createweather_element();
 						y_c = strtok(line,","); 				// taking the data from the beginning of the folder til ","
 						x_c = strtok(NULL,";"); 				// taking from "," to ";"
-						humidity_c = strtok(NULL,";"); 				//taking from ";" to ";" 
-						weather->humidity=humidity_c;
-						weather->coord_x=x_c;
-						weather->coord_y=y_c;
-						humidity_avl = addchildAVL(humidity_avl,weather);
+						humidity_c = strtok(NULL,";"); 				//taking from ";" to ";"
+						strcpy(weather->humidity, humidity_c);
+						strcpy(weather->coord_x, x_c);
+						strcpy(weather->coord_y,y_c);
+						weather->toSort = atoi(humidity_c);
+						humidity_avl = addchildAVL_A(humidity_avl,weather);
 						}
-						walkthrough(humidity_avl,'m');	
+						walkthrough_infAvl(humidity_avl,'m');
 					break;
 				case 2 :
-				ABR* humidity_abr = NULL;
+				Tree* humidity_abr = NULL;
 					while(fgets(line,50,f1) != NULL){
 						weather_elements* weather = createweather_element();
 						y_c = strtok(line,","); 				// taking the data from the beginning of the folder til ","
 						x_c = strtok(NULL,";"); 				// taking from "," to ";"
-						humidity_c = strtok(NULL,";"); 				//taking from ";" to ";" 
-						weather->humidity=humidity_c;
-						weather->coord_x=x_c;
-						weather->coord_y=y_c;
+						humidity_c = strtok(NULL,";"); 				//taking from ";" to ";"
+						strcpy(weather->humidity, humidity_c);
+						strcpy(weather->coord_x, x_c);
+						strcpy(weather->coord_y,y_c);
+						weather->toSort = atoi(humidity_c);
 						humidity_abr = addchildABR(humidity_abr,weather);
 						}
-						walkthrough(humidity_avl,'m');	
-					break;
+						walkthrough_inf(humidity_abr,'m');
+            break;
 				case 3 :
 					while(fgets(line,50,f1) != NULL){
 						weather_elements* weather = createweather_element();
 						y_c = strtok(line,","); 				// taking the data from the beginning of the folder til ","
 						x_c = strtok(NULL,";"); 				// taking from "," to ";"
-						humidity_c = strtok(NULL,";"); 				//taking from ";" to ";" 
-						weather->humidity=humidity_c;
-						weather->coord_x=x_c;
-						weather->coord_y=y_c;
-						int fusion=RapidFilter(...);
+						humidity_c = strtok(NULL,";"); 				//taking from ";" to ";"
+						strcpy(weather->humidity, humidity_c);
+						strcpy(weather->coord_x, x_c);
+						strcpy(weather->coord_y,y_c);
+						weather->toSort = atoi(humidity_c);
+						//int fusion=RapidFilter(...);
 						}
-						
+
 					break;
 				default :
-					AVL* humidity_avl = NULL;
 					while(fgets(line,50,f1) != NULL){
 						weather_elements* weather = createweather_element();
 						y_c = strtok(line,","); 				// taking the data from the beginning of the folder til ","
 						x_c = strtok(NULL,";"); 				// taking from "," to ";"
-						humidity_c = strtok(NULL,";"); 				//taking from ";" to ";" 
-						weather->humidity=humidity_c;
-						weather->coord_x=x_c;
-						weather->coord_y=y_c;
-						humidity_avl = addchildAVL(humidity_avl,weather);
+						humidity_c = strtok(NULL,";"); 				//taking from ";" to ";"
+						strcpy(weather->humidity, humidity_c);
+						strcpy(weather->coord_x, x_c);
+						strcpy(weather->coord_y,y_c);
+						weather->toSort = atoi(humidity_c);
+						humidity_avl = addchildAVL_A(humidity_avl,weather);
 						}
-						walkthrough(humidity_avl,'m');
+						walkthrough_infAvl(humidity_avl,'m');
 				}
-			
+
 		case 'h' :
-			FILE* f1;
-			f1=fopen("temp.csv","r");
-			char line[50];
 			char* height_c;
-			char* x_c;
-			char* y_c;
 			if(f1 == NULL){
 				printf("error altitude");
 				exit(2);
 			}
-			
+
 			switch (whichfilter){
 				case 1 :
-				AVL* altitude_avl = NULL;
 					while(fgets(line,50,f1) != NULL){
 						weather_elements* weather = createweather_element();
 						y_c = strtok(line,","); 				// taking the data from the beginning of the folder til ","
 						x_c = strtok(NULL,";"); 				// taking from "," to ";"
-						height_c = strtok(NULL,";"); 				//taking from ";" to ";" 
-						weather->altitude=height_c;
-						weather->coord_x=x_c;
-						weather->coord_y=y_c;
-						altitude_avl = addchildAVL(altitude_avl,weather);
+						height_c = strtok(NULL,";"); 				//taking from ";" to ";"
+						strcpy(weather->altitude, height_c);
+						strcpy(weather->coord_x, x_c);
+						strcpy(weather->coord_y,y_c);
+						weather->toSort = atoi(height_c);
+						altitude_avl = addchildAVL_A(altitude_avl,weather);
 						}
-						walkthrough(altitude_avl,'h');	
+						walkthrough_infAvl(altitude_avl,'h');
 					break;
 				case 2 :
-				ABR* altitude_abr = NULL;
+				Tree* altitude_abr = NULL;
 					while(fgets(line,50,f1) != NULL){
 						weather_elements* weather = createweather_element();
 						y_c = strtok(line,","); 				// taking the data from the beginning of the folder til ","
 						x_c = strtok(NULL,";"); 				// taking from "," to ";"
-						height_c = strtok(NULL,";"); 				//taking from ";" to ";" 
-						weather->altitude=height_c;
-						weather->coord_x=x_c;
-						weather->coord_y=y_c;
+						height_c = strtok(NULL,";"); 				//taking from ";" to ";"
+						strcpy(weather->altitude, height_c);
+						strcpy(weather->coord_x, x_c);
+						strcpy(weather->coord_y,y_c);
+						weather->toSort = atoi(height_c);
 						altitude_abr = addchildABR(altitude_abr,weather);
 						}
-						walkthrough(altitude_abr,'h');	
+						walkthrough_inf(altitude_abr,'h');
+
 					break;
 				case 3 :
 					while(fgets(line,50,f1) != NULL){
 						weather_elements* weather = createweather_element();
 						y_c = strtok(line,","); 				// taking the data from the beginning of the folder til ","
 						x_c = strtok(NULL,";"); 				// taking from "," to ";"
-						height_c = strtok(NULL,";"); 				//taking from ";" to ";" 
-						weather->altitude=height_c;
-						weather->coord_x=x_c;
-						weather->coord_y=y_c;
-						int fusion = RapidFilter(...);
+						height_c = strtok(NULL,";"); 				//taking from ";" to ";"
+						strcpy(weather->altitude, height_c);
+						strcpy(weather->coord_x, x_c);
+						strcpy(weather->coord_y,y_c);
+						weather->toSort = atoi(height_c);
+						//int fusion = RapidFilter(...);
 						}
-						
 					break;
 				default :
-					AVL* altitude_avl = NULL;
+					AVLNode* altitude_avl = NULL;
+
 					while(fgets(line,50,f1) != NULL){
 						weather_elements* weather = createweather_element();
 						y_c = strtok(line,","); 				// taking the data from the beginning of the folder til ","
 						x_c = strtok(NULL,";"); 				// taking from "," to ";"
-						height_c = strtok(NULL,";"); 				//taking from ";" to ";" 
-						weather->altitude=height_c;
-						weather->coord_x=x_c;
-						weather->coord_y=y_c;
-						altitude_avl = addchildAVL(altitude_avl,weather);
+						height_c = strtok(NULL,";"); 				//taking from ";" to ";"
+						strcpy(weather->altitude, height_c);
+						strcpy(weather->coord_x, x_c);
+						strcpy(weather->coord_y,y_c);
+						weather->toSort = atoi(height_c);
+						altitude_avl = addchildAVL_A(altitude_avl,weather);
 						}
-						walkthrough(altitude_avl,'h');	
+					walkthrough_infAvl(altitude_avl,'h');
+					break;
 				}
-			
+
 		case 't' :
-			FILE* f1;
-			f1=fopen("temp.csv","r");
-			char line[50];
 			char* temp_c;
 			char* ID;
 			char* temp_min;
@@ -183,74 +175,37 @@ int whichfilter;
 				printf("error temp");
 				exit(2);
 			}
-			
+
 			switch (whichfilter){
 				case 1 :
-				AVL* temperature_avl = NULL;
+				AVLNode* temperature_avl = NULL;
+
 				while(fgets(line,50,f1) != NULL){
 					weather_elements* weather = createweather_element();
 					ID = strtok(line,";");
 					temp_c = strtok(NULL,";");
 					temp_min = strtok(NULL,";");
 					temp_max = strtok(NULL,";");
-					weather->station=ID;
-					weather->tempe_min = atoi(temp_min); 		// pas sur de ca 
-					weather->tempe_max = atoi(temp_max);		// "		"
-					weather->temperature= atoi(temp_c);		// "		"
-				
-				case 2 :
-				
+					strcpy(weather->station,ID);
+					strcpy(weather->tempe_min,temp_min); 		// pas sur de ca
+					strcpy(weather->tempe_max,temp_max);		// "		"
+					strcpy(weather->temperature,temp_c);		// "		"
+					weather->toSort = atoi(ID);
+					temperature_avl = addchildAVL_A(temperature_avl, weather);
+				}break;
+
+				case 2 : break;
+
 				case 3 :
-					
-						
+
+
 					break;
 				default :
-					
+				break;
 				}
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+
+
 		default :
 			printf("we have a problem");
 		}
-			
 }
