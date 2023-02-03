@@ -24,13 +24,13 @@ AVLNode *rotate_right(AVLNode* pTree) {
 	AVLNode* Pivot=NULL;
 	int eq_p,eq_a;
 	Pivot=pTree->Left;
-	pTree->Right=Pivot->Right;
+	pTree->Left=Pivot->Right;
 	Pivot->Right = pTree;
 	eq_a=pTree->height;
 	eq_p=Pivot->height;
-	pTree->height=eq_a-min(eq_a,eq_p, 0) + 1;
+	pTree->height=eq_a-min2(eq_p, 0) + 1;
 	Pivot->height=max(eq_a+2,eq_a+eq_p+2,eq_p+1);
-	Pivot=pTree;
+	pTree=Pivot;
 	return pTree;
 }
 
@@ -38,13 +38,13 @@ AVLNode *rotate_left(AVLNode *pTree) {
  	AVLNode* Pivot=NULL;
 	int eq_p,eq_a;
 	Pivot=pTree->Right;
-	pTree->Left=Pivot->Left;
+	pTree->Right=Pivot->Left;
 	Pivot->Left = pTree;
 	eq_a=pTree->height;
 	eq_p=Pivot->height;
-	pTree->height= (eq_a-min(eq_a, eq_p, 0) + 1);
-	pTree->height=max(eq_a+2,eq_a+eq_p+2,eq_p+1);
-	Pivot=pTree;
+	pTree->height= (eq_a-max2(eq_p, 0) - 1);
+	Pivot->height=min(eq_a-2,eq_a+eq_p-2,eq_p-1);
+	pTree=Pivot;
 	return pTree;
 }
 AVLNode* doublerotate_left(AVLNode* pTree){
@@ -81,8 +81,9 @@ AVLNode* addchildAVL_B(AVLNode *pTree, weather_elements* elmt ,int* h) {
 		*h=1;
 	return createtreeAVL(elmt);
 	}
-	if (elmt->toSort < pTree->elmt->toSort) {
+	else if (elmt->toSort <= pTree->elmt->toSort) {
     	pTree->Left = addchildAVL_B(pTree->Left , elmt, h);
+    	*h = -*h;
   	}
   	else if (elmt->toSort > pTree->elmt->toSort) {
    	 pTree->Right = addchildAVL_B(pTree->Right , elmt, h);
@@ -109,12 +110,31 @@ AVLNode* addchildAVL_A(AVLNode *pTree, weather_elements* elmt){
 }
 
 
+void processhAvl(AVLNode* pTree, char cara){
+	/*if(file == NULL){
+		printf("Error file does not exist");
+		exit(2);
+	}*/
+	if(pTree != NULL){
+		switch (cara){
+			case 'h' : printf( "%s %s %s", pTree->elmt->coord_x , pTree->elmt->coord_y, pTree->elmt->altitude); break;
+			case 'm' : printf( "%s %s %s\n", pTree->elmt->coord_x , pTree->elmt->coord_y, pTree->elmt->humidity); break;
+			case 'w' : break;
+			case 't' : fprintf(file, "%s %s %s %s", pTree->elmt->station , pTree->elmt->temperature, pTree->elmt->tempe_min, pTree->elmt->tempe_min); break;
+			//case 'p' : fprintf(file, "%s %s %s", pTree->elmt->coord_x , pTree->elmt->coord_y, pTree->elmt->pressure); break;
+		}
+	}
+	if(pTree == NULL){
+		printf("null");
+	}
+}
 
 
 void walkthrough_infAvl(AVLNode* pTree, char cara){
+    file = fopen("output.csv","w");
 	if(pTree != NULL){
 		walkthrough_infAvl(pTree->Left, cara);
-		//processh(pTree); refait une ace AVLNode*
+		processhAvl(pTree, cara);
 		walkthrough_infAvl(pTree->Right, cara);
 	}
 }
@@ -161,17 +181,12 @@ Tree* createTreeABR(weather_elements* val){
 	return pTree;
 }
 
-int isEmpty(Tree* pTree){
-	if(pTree == NULL){
-		return 1;
-	}
-}
 
 Tree* addchildABR(Tree* pTree, weather_elements* val){
-	if(isEmpty(pTree)){
+	if(pTree == NULL){
 		return (createTreeABR(val));
 	}
-	if(val->toSort<pTree->elmt->toSort){
+	if(val->toSort<=pTree->elmt->toSort){
 		pTree->pLeft=addchildABR(pTree->pLeft,val);
 	}
 	if(val->toSort>pTree->elmt->toSort){
@@ -186,14 +201,17 @@ void processh(Tree* pTree, char cara){
 		printf("Error file does not exist");
 		exit(2);
 	}
-	if(!isEmpty(pTree)){
+	if(pTree != NULL){
 		switch (cara){
 			case 'h' : fprintf(file, "%s %s %s", pTree->elmt->coord_x , pTree->elmt->coord_y, pTree->elmt->altitude); break;
-			case 'm' : fprintf(file, "%s %s %s", pTree->elmt->coord_x , pTree->elmt->coord_y, pTree->elmt->humidity); break;
+			case 'm' : printf( "%s %s %s\n", pTree->elmt->coord_x , pTree->elmt->coord_y, pTree->elmt->humidity); break;
 			case 'w' : break;
 			case 't' : fprintf(file, "%s %s %s %s", pTree->elmt->station , pTree->elmt->temperature, pTree->elmt->tempe_min, pTree->elmt->tempe_min); break;
 			//case 'p' : fprintf(file, "%s %s %s", pTree->elmt->coord_x , pTree->elmt->coord_y, pTree->elmt->pressure); break;
 		}
+	}
+	if(pTree == NULL){
+		printf("null");
 	}
 }
 

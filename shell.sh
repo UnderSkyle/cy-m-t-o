@@ -94,12 +94,12 @@ for arg in $* ;do #not robust yet watch out four double -*
         '-w') wind=1 d=0 ;;
         '-h') height=1 d=0 ;;
         '-m') moist=1 d=0;;
-        '-F') coo="F" d=0;;
-        '-G') coo="G" d=0;;
-        '-S') coo="S" d=0;;
-        '-A') coo="A" d=0;;
-        '-O') coo="O" d=0;;
-        '-Q') coo="Q" d=0;;
+        '-F') cat $toSort | awk -F ';' '{if($1 >= 7005 && $1 <= 7790) print $0}' > tempReg.csv $toSort = tempReg.csv d=0;;
+        '-G') cat $toSort | awk -F ';' '{if($1 >= 81401 && $1 <= 81415) print $0}'> tempReg.csv $toSort = tempReg.csv  d=0;;
+        '-S') cat $toSort | awk -F ';' '{if($1 == 71805) print $0}'> tempReg.csv $toSort = tempReg.csv  d=0;;
+        '-A') cat $toSort | awk -F ';' '{if($1 >= 78890 && $1 <= 78925) print $0}'> tempReg.csv $toSort = tempReg.csv  d=0;;
+        '-O') cat $toSort | awk -F ';' '{if($1 >= 61968 && $1 <= 67005) print $0}'> tempReg.csv $toSort = tempReg.csv  d=0;;
+        '-Q') cat $toSort | awk -F ';' '{if($1 == 89642) print $0}'> tempReg.csv $toSort = tempReg.csv  d=0;;
         '-d') d=1 ;;
         '--tab') sorting=3 d=0;;
         '--abr') sorting=2 d=0;;
@@ -145,10 +145,7 @@ xmin=0
 xmax=0
 ymin=0
 ymax=0
-# todo the map thingy later(annoying)
-if [ ! -z $coo ] ; then
-    echo "MAP WIP"
-fi
+
 
 # todo later because mode
 
@@ -254,10 +251,8 @@ fi
 
 if [ $height -eq 1 ] ; then
     cut -f 14,10 -d';' $toSort > temp.csv
-#     make
-    awk '{print $1,$2}' FS="," OFS=";" temp.csv > temp2.csv
-    awk '{print $1,$2,$3}' FS=";" OFS=" " temp2.csv > temp.csv
-    cat temp3.csv > output.csv
+    make
+    ./exec m 2
     if [ -e "map.gnu" ] ; then
         rm map.gnu
     fi
@@ -280,7 +275,7 @@ splot 'output.csv' using 1:2:3 with pm3d">map.gnu
 
 fi
 
-rm temp*.csv
+# rm temp*.csv
 
 
 

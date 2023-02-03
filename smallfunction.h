@@ -24,5 +24,23 @@ int min (int a, int b , int c){ // for the rotation of the AVL
 		return c;
 	}
 }
+int min2(int a, int b){ // for the rotation of the AVL
+	if(a<=b){
+		return a;
+	}
+	else{
+	    return b;
+	}
+}
+int max2(int a, int b){ // for the rotation in the AVL
+	if(a<=b){
+		return b;
+	}
+	else{
+	    return a;
+	}
+}
+
+// need to m
 
 // need to make average calculation for vecteurs
