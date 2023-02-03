@@ -83,10 +83,6 @@ int main(int argc, const char* argv[]){
 					}
 					walkthrough_inf(humidity_abr,'m');
 					break;
-				case 3 :
-					printf("non");
-
-					break;
 				default :
 					while(fgets(line,50,f1) != NULL){
 						weather_elements* weather = createweather_element();
@@ -101,11 +97,12 @@ int main(int argc, const char* argv[]){
 							strcpy(weather->coord_x, x_c);
 							strcpy(weather->coord_y,y_c);
 							weather->toSort = atoi(humidity_c);
-							printf("%s %s %s", weather->coord_x , weather->coord_y, weather->humidity);
-							humidity_abr = addchildABR(humidity_abr, weather);
+							//printf("%s %s %d\n", weather->coord_x, weather->coord_y, weather->toSort);
+						humidity_avl = addchildAVL_A(humidity_avl, weather);
 						}
 					}
-					walkthrough_inf(humidity_abr,'m');
+					printf("ok");
+					walkthrough_infAvl(humidity_avl,'m');
 			}
 
 		case 'h' :
@@ -122,9 +119,9 @@ int main(int argc, const char* argv[]){
 							continue;
 						}
 						else{
-							height_c = strtok(line, ";");
 							y_c = strtok(NULL,","); 				// taking the data from the beginning of the folder til ","
-							x_c = strtok(NULL,"\n"); 				// taking from "," to ";"
+							x_c = strtok(NULL,";"); 				// taking from "," to ";"
+							height_c = strtok(line, "\n");
 							strcpy(weather->altitude, height_c);
 							strcpy(weather->coord_x, x_c);
 							strcpy(weather->coord_y,y_c);

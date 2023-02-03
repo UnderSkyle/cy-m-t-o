@@ -4,7 +4,7 @@
 #include "struct.h"
 
 
-FILE* file;
+FILE* file1;
 //////////////////////////////////////// AVL filter////////////////////////////////////////////
 
 AVLNode *createtreeAVL(weather_elements* element){
@@ -110,31 +110,24 @@ AVLNode* addchildAVL_A(AVLNode *pTree, weather_elements* elmt){
 }
 
 
-void processhAvl(AVLNode* pTree, char cara){
-	/*if(file == NULL){
-		printf("Error file does not exist");
-		exit(2);
-	}*/
-	if(pTree != NULL){
-		switch (cara){
-			case 'h' : printf( "%s %s %s", pTree->elmt->coord_x , pTree->elmt->coord_y, pTree->elmt->altitude); break;
-			case 'm' : printf( "%s %s %s\n", pTree->elmt->coord_x , pTree->elmt->coord_y, pTree->elmt->humidity); break;
-			case 'w' : break;
-			case 't' : fprintf(file, "%s %s %s %s", pTree->elmt->station , pTree->elmt->temperature, pTree->elmt->tempe_min, pTree->elmt->tempe_min); break;
-			//case 'p' : fprintf(file, "%s %s %s", pTree->elmt->coord_x , pTree->elmt->coord_y, pTree->elmt->pressure); break;
-		}
-	}
-	if(pTree == NULL){
-		printf("null");
-	}
-}
 
 
 void walkthrough_infAvl(AVLNode* pTree, char cara){
-    file = fopen("output.csv","w");
+    file1 = fopen("output.txt","w+");
+	//if(file1 == NULL){
+		//printf("Erreur file invalid");
+		//exit(4);
+	//}
 	if(pTree != NULL){
 		walkthrough_infAvl(pTree->Left, cara);
-		processhAvl(pTree, cara);
+		if(pTree != NULL)
+		switch (cara){
+			case 'h' : printf( "%s %s %s\n", pTree->elmt->coord_x , pTree->elmt->coord_y, pTree->elmt->altitude); break;
+			case 'm' : printf( "%s %s %s\n", pTree->elmt->coord_x , pTree->elmt->coord_y, pTree->elmt->humidity); break;
+			case 'w' : break;
+			case 't' : printf( "%s %s %s %s", pTree->elmt->station , pTree->elmt->temperature, pTree->elmt->tempe_min, pTree->elmt->tempe_min); break;
+			//case 'p' : fprintf(file, "%s %s %s", pTree->elmt->coord_x , pTree->elmt->coord_y, pTree->elmt->pressure); break;
+		}
 		walkthrough_infAvl(pTree->Right, cara);
 	}
 }
@@ -196,17 +189,12 @@ Tree* addchildABR(Tree* pTree, weather_elements* val){
 }
 
 void processh(Tree* pTree, char cara){
-	file = fopen("output.csv","w");
-	if(file == NULL){
-		printf("Error file does not exist");
-		exit(2);
-	}
 	if(pTree != NULL){
 		switch (cara){
-			case 'h' : fprintf(file, "%s %s %s", pTree->elmt->coord_x , pTree->elmt->coord_y, pTree->elmt->altitude); break;
+			case 'h' : printf( "%s %s %s", pTree->elmt->coord_x , pTree->elmt->coord_y, pTree->elmt->altitude); break;
 			case 'm' : printf( "%s %s %s\n", pTree->elmt->coord_x , pTree->elmt->coord_y, pTree->elmt->humidity); break;
 			case 'w' : break;
-			case 't' : fprintf(file, "%s %s %s %s", pTree->elmt->station , pTree->elmt->temperature, pTree->elmt->tempe_min, pTree->elmt->tempe_min); break;
+			case 't' : fprintf(file1, "%s %s %s %s", pTree->elmt->station , pTree->elmt->temperature, pTree->elmt->tempe_min, pTree->elmt->tempe_min); break;
 			//case 'p' : fprintf(file, "%s %s %s", pTree->elmt->coord_x , pTree->elmt->coord_y, pTree->elmt->pressure); break;
 		}
 	}
@@ -217,10 +205,16 @@ void processh(Tree* pTree, char cara){
 
 
 void walkthrough_inf(Tree* pTree, char cara){
+		file1 = fopen("output.txt","w");
+	if(file1 == NULL){
+		printf("Error file does not exist");
+		exit(2);
+	}
 	if(pTree != NULL){
 	walkthrough_inf(pTree->pLeft, cara);
 	processh(pTree, cara);
 	walkthrough_inf(pTree->pRight, cara);
 	}
+	fclose(file1);
 }
 

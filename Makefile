@@ -6,4 +6,3 @@ main.o: main.c filter.h smallfunction.h
 	
 exec: main.o
 	gcc main.o -o exec
-
