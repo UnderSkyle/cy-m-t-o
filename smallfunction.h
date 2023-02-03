@@ -1,3 +1,8 @@
+#include<stdlib.h>
+#include<stdio.h>
+#include "header.h"
+
+
 int max(int a, int b,int c){ // for the rotation in the AVL
 	if(a>b && a>c){
 		return a;	
