@@ -7,13 +7,12 @@
 FILE* file;
 //////////////////////////////////////// AVL filter////////////////////////////////////////////
 
-AVLNode *createtreeAVL(int val,weather_elements* element){
+AVLNode *createtreeAVL(weather_elements* element){
     AVLNode* pTree=malloc(sizeof(AVLNode));
     if(pTree==NULL){
         exit(1);
     }
-    pTree->value=val;
-    pTree->element=elmt;
+    pTree->elmt=element;
     pTree->Left=NULL;
     pTree->Right=NULL;
     pTree->height=0;
@@ -43,7 +42,7 @@ AVLNode *rotate_left(AVLNode *pTree) {
 	Pivot->Left = pTree;
 	eq_a=pTree->height;
 	eq_p=Pivot->height;
-	pTree->height=eq_a-min(eq_a, eq_p, 0) + 1;
+	pTree->height= (eq_a-min(eq_a, eq_p, 0) + 1);
 	pTree->height=max(eq_a+2,eq_a+eq_p+2,eq_p+1);
 	Pivot=pTree;
 	return pTree;
@@ -77,52 +76,21 @@ AVLNode* balanceAVL(AVLNode* pTree){
 	return pTree;
 }
 
-AVLNode* addchildAVL_B(AVLNode *pTree, int val, weather_elements* elmt ,int* h) {
-	if (val < pTree->value) {
-    	pTree->Left = addchildAVL(pTree->Left, val, elmt, h);
+AVLNode* addchildAVL_B(AVLNode *pTree, weather_elements* elmt ,int* h) {
+	if(pTree==NULL){
+		*h=1;
+	return createtreeAVL(elmt);
+	}
+	if (elmt->toSort < pTree->elmt->toSort) {
+    	pTree->Left = addchildAVL_B(pTree->Left , elmt, h);
   	}
-  	else if (val > pTree->value) {
-   	 pTree->Right = addchildAVL(pTree->Right, val, elmt, h);
- 	 }
+  	else if (elmt->toSort > pTree->elmt->toSort) {
+   	 pTree->Right = addchildAVL_B(pTree->Right , elmt, h);
+	}
 	else {
     	return pTree;
   	}
-	if(pTree==NULL){
-		*h=1;
-	return createtreeAVL(val,elmt);
-	}
 
-	else if (val<pTree->value){
-		pTree->Left=addchildAVL(pTree->Left,val,elmt,h);
-		*h=-*h;
-	}
-	else if(val>pTree->value){
-		pTree->Right=addchildAVL(pTree->Right,val,elmt,h);
-		}
-	else{
-		if(elmt->val_sorted == 1){
-			if(elmt-> altitude < pTree->element->altitude){
-				pTree->Left = addchildAVL(pTree->Left,val,elmt,h);
-				*h=-*h;
-			}
-			else if(elmt->altitude > ptree->element->altitude){
-				pTree->Right = addchildAVL(pTree->Right,val,elmt,h);
-			}
-			else {
-				*h=0;
-				return pTree;
-			}
-		}
-		if(elmt->val_sorted == 2){
-			if(elmt -> humidity > pTree->element->humidity){
-				pTree-> element -> humidity = elmt->humidity;
-			}
-			*h=0;
-			return pTree;
-		}
-
-
-	}
 	if(*h!=0){
 	pTree->height = pTree-> height + *h;
 	pTree=balanceAVL(pTree);
@@ -135,25 +103,19 @@ AVLNode* addchildAVL_B(AVLNode *pTree, int val, weather_elements* elmt ,int* h) 
 	}
 return pTree;
 }
-AVLNode* addchildAVL_A(AVLNode *pTree, int val, weather_elements* elmt){
+AVLNode* addchildAVL_A(AVLNode *pTree, weather_elements* elmt){
 	int h;
-	return addchildAVL_B(pTree,  val, elmt,&h);
-}
-void remakeAVL(AVLNode** pTree, AVLNode* pTree_tmp){
-	if(pTree_tmp != NULL){
-		pTree_tmp -> element ->val_sorted = 1;
-		*pTree = addchildAVL_A(*pTree,pTree_tmp->element->humidity, pTree_tmp-> element);
-		remakeAVL(pTree, pTree_tmp->Left);
-		remakeAVL(pTree, pTree_tmp->Right);
-	}
+	return addchildAVL_B(pTree,elmt,&h);
 }
 
 
-void walkthrough_pre(AVLNode* pTree){
+
+
+void walkthrough_infAvl(AVLNode* pTree, char cara){
 	if(pTree != NULL){
-		processh(pTree)
-		walkthrough_pre(pTree->Left);
-		walkthrough_pre(pTree->Right);
+		walkthrough_infAvl(pTree->Left, cara);
+		//processh(pTree); refait une ace AVLNode*
+		walkthrough_infAvl(pTree->Right, cara);
 	}
 }
 
@@ -188,7 +150,7 @@ void Rapidfilter(int tab[], int first, int last) {
 
 /////////////////////////////////////////////ABR filter////////////////////////////////////////
 
-Tree* createTreeABR(weather_elements val){
+Tree* createTreeABR(weather_elements* val){
 	Tree* pTree=malloc(sizeof(Tree));
 	if(pTree==NULL){
 		exit(1);
@@ -200,42 +162,47 @@ Tree* createTreeABR(weather_elements val){
 }
 
 int isEmpty(Tree* pTree){
-	return(pTree==NULL);
+	if(pTree == NULL){
+		return 1;
+	}
 }
-
 
 Tree* addchildABR(Tree* pTree, weather_elements* val){
 	if(isEmpty(pTree)){
-		return (createTree(val));
+		return (createTreeABR(val));
 	}
-	if(val->toSort<pTree->value->toSort){
+	if(val->toSort<pTree->elmt->toSort){
 		pTree->pLeft=addchildABR(pTree->pLeft,val);
 	}
-	if(val>pTree->value){
+	if(val->toSort>pTree->elmt->toSort){
 		pTree->pRight=addchildABR(pTree->pRight,val);
 	}
 	return(pTree);
 }
 
-
-
-
-void processh(Tree* pTree){
+void processh(Tree* pTree, char cara){
 	file = fopen("output.csv","w");
 	if(file == NULL){
 		printf("Error file does not exist");
 		exit(2);
 	}
 	if(!isEmpty(pTree)){
-		fprintf("%s %s %s", pTree->elmt->x , pTree->elmt->y pTree->elmt->toSort);
+		switch (cara){
+			case 'h' : fprintf(file, "%s %s %s", pTree->elmt->coord_x , pTree->elmt->coord_y, pTree->elmt->altitude); break;
+			case 'm' : fprintf(file, "%s %s %s", pTree->elmt->coord_x , pTree->elmt->coord_y, pTree->elmt->humidity); break;
+			case 'w' : break;
+			case 't' : fprintf(file, "%s %s %s %s", pTree->elmt->station , pTree->elmt->temperature, pTree->elmt->tempe_min, pTree->elmt->tempe_min); break;
+			//case 'p' : fprintf(file, "%s %s %s", pTree->elmt->coord_x , pTree->elmt->coord_y, pTree->elmt->pressure); break;
+		}
 	}
 }
 
-void walkthrough_pre(Tree* pTree, char cara){
+
+void walkthrough_inf(Tree* pTree, char cara){
 	if(pTree != NULL){
-	process(pTree);
-	walkthrough_pre(pTree->pLeft);
-	walkthrough_pre(pTree->pRight);
+	walkthrough_inf(pTree->pLeft, cara);
+	processh(pTree, cara);
+	walkthrough_inf(pTree->pRight, cara);
 	}
 }
 
