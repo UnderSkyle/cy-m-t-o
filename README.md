@@ -16,3 +16,6 @@ How to use our project :
 2) Then you must choose the area from the list of countries/ocean/continent ( if no area is choosen , every element will be taken into account)
 3) You will next need to choose which type of filtering method you want (fusion, abr or avl)
 4) Our project will send you back a graph with the sorted element you wanted to see (the way the elements are sorted depends from element to element)
+
+
+WARNING : the programm C compile but does not fully work so i asked some other group to give me sorted data that i used to create the png
